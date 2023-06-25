@@ -1,0 +1,49 @@
+data GetWorkersInfoDealsDefaultWorker:
+    dealId: string
+    chainNetwork: string
+    chainNetworkId: u64
+    dealIdOriginal: string
+    definition: string
+    timestamp: string
+
+data GetWorkersInfoDeals:
+    defaultWorker: ?GetWorkersInfoDealsDefaultWorker
+
+data GetWorkersInfoHostsDefaultWorkerInstallationSpells:
+    hostId: string
+    spellId: string
+    workerId: string
+
+data GetWorkersInfoHostsDefaultWorker:
+    definition: string
+    installationSpells: []GetWorkersInfoHostsDefaultWorkerInstallationSpells
+    timestamp: string
+    relayId: string
+
+data GetWorkersInfoHosts:
+    defaultWorker: ?GetWorkersInfoHostsDefaultWorker
+
+data GetWorkersInfo:
+    deals: GetWorkersInfoDeals
+    hosts: GetWorkersInfoHosts
+
+func getWorkersInfo() -> GetWorkersInfo:
+    <- GetWorkersInfo(
+        deals=GetWorkersInfoDeals(
+            defaultWorker=nil
+        ),
+        hosts=GetWorkersInfoHosts(
+            defaultWorker=?[GetWorkersInfoHostsDefaultWorker(
+                definition="bafkreicpk2xt2423p3nrk7l3fysd6xbf32mdstaypou5uhtughefxqwf54",
+                installationSpells=[
+                    GetWorkersInfoHostsDefaultWorkerInstallationSpells(
+                        hostId="12D3KooWJd3HaMJ1rpLY1kQvcjRPEvnDwcXrH8mJvk7ypcZXqXGE",
+                        spellId="31a24824-a287-4b54-9f21-eb4da4deb8fe",
+                        workerId="12D3KooWFvuNpcsAgQVNVpXYgbzUYwiFphf315SorbKqUnD2J3Sj"
+                    )
+                ],
+                timestamp="2023-06-24T23:34:43.103Z",
+                relayId="12D3KooWDUszU2NeWyUVjCXhGEt1MoZrhvdmaQQwtZUriuGN1jTr"
+            )]
+        )
+    )
