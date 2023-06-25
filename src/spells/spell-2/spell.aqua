@@ -1,0 +1,48 @@
+import "@fluencelabs/spell/api.aqua"
+import "workers.aqua"
+
+data BlockChainConfig:
+  start_block: u32
+  end_block: u32
+
+data ClockConfig:
+  start_sec: u32
+  end_sec: u32
+  period_sec: u32
+
+data ConnectionPoolConfig:
+  connect: bool
+  disconnect: bool
+
+data TriggerConfig:
+  clock: ClockConfig
+  connections: ConnectionPoolConfig
+  blockchain: BlockChainConfig
+
+service Worker("worker"):
+  -- throws exception if the worker already exists
+  create(deal_id: ?string) -> string
+  -- throws exception if the worker doesn't exist
+  get_peer_id(deal_id: ?string) -> string
+
+func get_worker_id() -> string, string:
+    info <- getWorkersInfo()
+    spell = info.hosts.defaultWorker!.installationSpells[0]
+    <- spell.workerId, spell.hostId
+
+-- Here we use Worker API in direct hosting mode, so we don't need to provide deal id
+func get_peer_id() -> string:
+    worker_id: *string
+    try:
+        worker_id <<- Worker.get_peer_id(nil)
+    otherwise:
+        worker_id <<- Worker.create(nil)
+    <- worker_id!
+
+func install(script: string, dat: ⊤, cfg: TriggerConfig) -> string:
+    on HOST_PEER_ID:
+        -- Users can install spells only in a worker scope.
+        worker_id, host_id <- get_worker_id()
+        on worker_id via HOST_PEER_ID:
+            sid <- PeerSpell.install(script, dat, cfg)
+    <- sid

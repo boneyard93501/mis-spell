@@ -1,0 +1,10 @@
+(xor
+ (seq
+  (seq
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+   (call %init_peer_id% ("debug" "stringify") ["Spell is working!"] str)
+  )
+  (call %init_peer_id% ("worker-spell" "list_push_string") ["logs" str])
+ )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+)

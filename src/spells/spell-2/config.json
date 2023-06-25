@@ -1,0 +1,9 @@
+{
+  "script": "(xor\n(seq\n   (seq\n    (call %init_peer_id% (\"getDataSrv\" \"-relay-\") [] -relay-)\n    (call %init_peer_id% (\"debug\" \"stringify\") [\"Spell is working!\"] str)\n   )\n   (call %init_peer_id% (\"worker-spell\" \"list_push_string\") [\"logs\" str])\n  )\n  (call %init_peer_id% (\"errorHandlingSrv\" \"error\") [%last_error% 1])\n )",
+  "trigger_config": {
+    "clock": { "start_sec": 1, "end_sec": 0, "period_sec": 0 },
+    "connections": { "connect": false, "disconnect": false },
+    "blockchain": { "start_block": 0, "end_block": 0 }
+  },
+  "init": {}
+}
